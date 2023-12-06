@@ -5,6 +5,7 @@ import de.jnmultimedia.data.model.Token
 import de.jnmultimedia.data.model.User
 import de.jnmultimedia.data.model.UserCredentials
 import de.jnmultimedia.data.model.UserRole
+import de.jnmultimedia.data.repositories.Repositories
 import de.jnmultimedia.data.repositories.UserRepository
 import de.jnmultimedia.utils.JWTUtil
 import io.ktor.http.*
@@ -15,7 +16,9 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
-fun Route.userRoutes(userRepository: UserRepository) {
+fun Route.userRoutes(repositories: Repositories) {
+    val userRepository = repositories.userRepository
+
     route("/users") {
         authenticate {
             // READ

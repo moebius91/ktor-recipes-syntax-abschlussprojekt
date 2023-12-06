@@ -2,6 +2,7 @@ package de.jnmultimedia.routes
 
 import de.jnmultimedia.data.model.Token
 import de.jnmultimedia.data.model.UserCredentials
+import de.jnmultimedia.data.repositories.Repositories
 import de.jnmultimedia.data.repositories.TokenRepository
 import de.jnmultimedia.data.repositories.UserRepository
 import de.jnmultimedia.utils.JWTUtil
@@ -14,7 +15,10 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import java.time.ZoneId
 
-fun Route.authenticationRoutes(userRepository: UserRepository, tokenRepository: TokenRepository) {
+fun Route.authenticationRoutes(repositories: Repositories) {
+    val userRepository = repositories.userRepository
+    val tokenRepository = repositories.tokenRepository
+
     route("/login") {
         post {
             val credentials = call.receive<UserCredentials>()

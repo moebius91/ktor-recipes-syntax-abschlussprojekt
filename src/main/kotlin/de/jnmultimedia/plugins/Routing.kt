@@ -7,14 +7,9 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 fun Application.configureRouting(repositories: Repositories) {
-    val userRepository = repositories.userRepository
-    val tokenRepository = repositories.tokenRepository
-    val tagRepository = repositories.tagRepository
-    val categoryRepository = repositories.categoryRepository
-
     routing {
-        authenticationRoutes(userRepository, tokenRepository)
-        userRoutes(userRepository)
+        authenticationRoutes(repositories)
+        userRoutes(repositories)
         recipeRoutes(repositories)
         ingredientsRoutes(repositories)
         categoriesRoutes(repositories)
