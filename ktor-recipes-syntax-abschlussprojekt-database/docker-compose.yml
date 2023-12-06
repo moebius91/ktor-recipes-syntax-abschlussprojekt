@@ -1,6 +1,6 @@
 version: '3.8'
 services:
-  ktor-sample-admin-panel-login-db:
+  ktor-recipes-syntax-abschlussprojekt-database:
     image: mariadb:latest
     environment:
       MYSQL_DATABASE: jno_testapi
@@ -11,8 +11,8 @@ services:
       - ./db_data:/var/lib/mysql
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
-  ktor-sample-admin-panel-login-server:
-    image: ktor-sample-admin-panel-login
+  ktor-recipes-syntax-abschlussprojekt-server:
+    image: ktor-recipes-syntax-abschlussprojekt
     ports:
       - "8080:8080"
     restart: unless-stopped
