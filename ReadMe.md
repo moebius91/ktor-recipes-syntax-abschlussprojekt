@@ -410,4 +410,95 @@ Diese Routen ermöglichen das Erstellen, Aktualisieren und Löschen von Benutzer
 - **Löschen (DELETE `/user/{userId}`):** Ermöglicht das Löschen eines Benutzerkontos.
 
 ---
+
+# Docker-Konfiguration und Build-Prozess (Aktualisiert)
+
+## Docker-Build und Containerisierung
+
+Um das KTOR-Projekt in einer Docker-Umgebung laufen zu lassen, sind spezifische Build-Schritte erforderlich. Diese Schritte umfassen das Erstellen des Shadow-Jars und das Erstellen des Docker-Images.
+
+### ShadowJar Erstellung
+
+Das Projekt verwendet Gradle und ein ShadowJar-Plugin, um eine ausführbare JAR-Datei zu erstellen, die alle benötigten Abhängigkeiten enthält.
+
+- **Schritt 1:** Im Hauptverzeichnis des Projekts führen Sie den Gradle-Befehl aus, um den ShadowJar zu erstellen.
+    - Befehl:
+      ```bash
+      ./gradlew shadowJar
+      ```
+
+### Vorbereitung für Docker Image Erstellung
+
+- **Schritt 2:** Wechseln Sie in das Verzeichnis, das für den Docker-Build vorgesehen ist.
+    - Befehl:
+      ```bash
+      cd ktor-recipes-syntax-abschlussprojekt-database
+      ```
+
+### Docker Image Erstellung
+
+Nachdem der ShadowJar erstellt wurde, muss das Docker-Image gebaut werden. Dies geschieht durch Kopieren der JAR-Datei in das Docker-Build-Verzeichnis und den Einsatz des `docker build`-Befehls.
+
+- **Schritt 3:** Kopieren Sie die ShadowJar-Datei in das Verzeichnis, das für den Docker-Build vorgesehen ist.
+    - Befehl für allgemeine Systeme:
+      ```bash
+      cp ../build/libs/de.jnmultimedia.ktor-recipes-syntax-abschlussprojekt-all.jar de.jnmultimedia.ktor-recipes-syntax-abschlussprojekt-all.jar
+      ```
+    - Befehl für Linux-Systeme (mit `sudo`):
+      ```bash
+      cp ../build/libs/de.jnmultimedia.ktor-recipes-syntax-abschlussprojekt-all.jar de.jnmultimedia.ktor-recipes-syntax-abschlussprojekt-all.jar
+      ```
+
+- **Schritt 4:** Bauen Sie das Docker-Image mit dem Tag `ktor-recipes-syntax-abschlussprojekt`.
+    - Befehl für allgemeine Systeme:
+      ```bash
+      docker build -t ktor-recipes-syntax-abschlussprojekt .
+      ```
+    - Befehl für Linux-Systeme (mit `sudo`):
+      ```bash
+      sudo docker build -t ktor-recipes-syntax-abschlussprojekt .
+      ```
+
+### Wichtige Hinweise
+
+- Stellen Sie sicher, dass der Pfad zur JAR-Datei in den Kopierbefehlen korrekt ist.
+- Beachten Sie, dass Sie möglicherweise `sudo` benötigen, um Docker-Befehle auf einigen Linux-Systemen auszuführen.
+
+Nachdem das Docker-Image erfolgreich erstellt wurde, kann das KTOR-Projekt mithilfe von Docker Compose gestartet werden. Dieser Prozess beinhaltet das Hochfahren des KTOR-Servers und der MariaDB-Datenbank in ihren jeweiligen Containern.
+
+## Docker Compose Start
+
+Mit Docker Compose können Sie die in der `docker-compose.yml` definierten Dienste (Services) einfach starten. Dies umfasst sowohl den KTOR-Server als auch die MariaDB-Datenbank.
+
+### Starten der Docker-Container
+
+- **Schritt 5:** Starten Sie die Docker-Container mithilfe von Docker Compose.
+
+    - Standardbefehl:
+      ```bash
+      docker-compose up -d
+      ```
+      oder
+      ```bash
+      docker-compose up
+      ```
+      Der Parameter `-d` startet die Container im Hintergrund (Detached-Modus).
+
+    - Befehl für Linux-Systeme (mit `sudo`):
+      ```bash
+      sudo docker-compose up -d
+      ```
+      oder
+      ```bash
+      sudo docker-compose up
+      ```
+      Auch hier startet der Parameter `-d` die Container im Hintergrund.
+
+### Wichtige Hinweise
+
+- Stellen Sie sicher, dass Sie sich im Verzeichnis mit der `docker-compose.yml`-Datei befinden, bevor Sie den Docker Compose-Befehl ausführen.
+- Verwenden Sie den `-d`-Parameter, wenn Sie die Container im Hintergrund laufen lassen möchten, sodass die Terminal-Sitzung für andere Befehle frei bleibt.
+
+---
+
 Dokumentation mit ChatGPT auf Basis des Quelltextes erstellt.
