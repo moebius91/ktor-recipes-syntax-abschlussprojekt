@@ -5,6 +5,8 @@ val logback_version: String by project
 
 val exposed_version: String by project
 val h2_version: String by project
+val mindrot_version: String by project
+
 plugins {
     kotlin("jvm") version "1.9.21"
     id("io.ktor.plugin") version "2.3.6"
@@ -39,4 +41,12 @@ dependencies {
     implementation("io.ktor:ktor-server-config-yaml:2.3.6")
     testImplementation("io.ktor:ktor-server-tests-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+
+    // Abhängigkeiten ergänzt
+    implementation("com.zaxxer:HikariCP:3.4.5")
+    implementation("org.mariadb.jdbc:mariadb-java-client:2.7.3")
+    implementation("org.mindrot:jbcrypt:$mindrot_version")
+    implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
+    implementation("org.jetbrains.exposed:exposed-java-time:$exposed_version")
+
 }

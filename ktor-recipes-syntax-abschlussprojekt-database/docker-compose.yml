@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  ktor-sample-admin-panel-login-db:
+    image: mariadb:latest
+    environment:
+      MYSQL_DATABASE: jno_testapi
+      MYSQL_USER: jno_api
+      MYSQL_PASSWORD: jno_api
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./db_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  ktor-sample-admin-panel-login-server:
+    image: ktor-sample-admin-panel-login
+    ports:
+      - "8080:8080"
+    restart: unless-stopped

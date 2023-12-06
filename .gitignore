@@ -34,3 +34,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+/ktor-recipes-syntax-abschlussprojekt-database/db_data/
+/db_working/
