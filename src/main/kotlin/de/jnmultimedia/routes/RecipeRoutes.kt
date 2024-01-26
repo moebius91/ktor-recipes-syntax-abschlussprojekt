@@ -14,6 +14,8 @@ fun Route.recipeRoutes(repositories: Repositories) {
     val recipeRepository = repositories.recipeRepository
     val recipeCategoryRepository = repositories.recipeCategoryRepository
     val recipeTagRepository = repositories.recipeTagRepository
+    val recipeIngredientRepository = repositories.recipeIngredientRepository
+    val ingredientRepository = repositories.ingredientRepository
     val tagRepository = repositories.tagRepository
     val categoryRepository = repositories.categoryRepository
 
@@ -39,11 +41,21 @@ fun Route.recipeRoutes(repositories: Repositories) {
                 return@get
             }
 
+            val ingredientsIds = recipeIngredientRepository.getIngredientsForRecipe(recipeId)
+
             val tagsIds = recipeTagRepository.getTagsForRecipe(recipeId)
             val categoryIds = recipeCategoryRepository.getCategoriesForRecipe(recipeId)
 
-            val tags = mutableListOf<Tag>()
-            val categories = mutableListOf<Category>()
+            val ingredients = mutableListOf<Ingredient?>()
+            val tags = mutableListOf<Tag?>()
+            val categories = mutableListOf<Category?>()
+
+            ingredientsIds.forEach { ingredientId ->
+                val ingredient = ingredientRepository.getIngredientById(ingredientId)
+                if (ingredient != null) {
+                    ingredients.add(ingredient)
+                }
+            }
 
             tagsIds.forEach { tagId ->
                 val tag = tagRepository.getTagById(tagId)
@@ -63,10 +75,11 @@ fun Route.recipeRoutes(repositories: Repositories) {
                 recipe.recipeId,
                 recipe.name,
                 recipe.description,
+                ingredients,
                 tags,
                 categories,
-                recipe.authorId,
-                recipe.creationDate
+                recipe.authorId ?: 0,
+                recipe.creationDate!!
             )
 
             call.respond(recipeOutput)
@@ -74,7 +87,7 @@ fun Route.recipeRoutes(repositories: Repositories) {
 
         authenticate {
             // CREATE
-            post("{recipeId}") {
+            post {
                 val principal = call.principal<JWTPrincipal>()
                 val roleName = principal?.payload?.getClaim("role")?.asString()
                 val userId = principal?.payload?.getClaim("userId")?.asInt()
@@ -88,6 +101,7 @@ fun Route.recipeRoutes(repositories: Repositories) {
                 val recipeCreationRequest = try {
                     call.receive<RecipeCreationRequest>()
                 } catch (e: Exception) {
+                    application.log.error("Error while receiving RecipeCreationRequest", e)
                     call.respond(HttpStatusCode.BadRequest, "Invalid request format")
                     return@post
                 }
@@ -101,12 +115,34 @@ fun Route.recipeRoutes(repositories: Repositories) {
                 }
 
                 try {
+
+                } catch (e: Exception) {
+                    call.respond(HttpStatusCode.InternalServerError, "Ingredients not found in RecipeCreateRequest.")
+                }
+
+                try {
+
+                } catch (e: Exception) {
+                    call.respond(HttpStatusCode.InternalServerError, "Ingredients not found in RecipeCreateRequest.")
+                }
+
+                try {
+
+                } catch (e: Exception) {
+                    call.respond(HttpStatusCode.InternalServerError, "Ingredients not found in RecipeCreateRequest.")
+                }
+
+                try {
                     recipeCreationRequest.categoryIds.forEach { categoryId ->
                         recipeCategoryRepository.addCategoryToRecipe(createdRecipe.recipeId, categoryId)
                     }
 
                     recipeCreationRequest.tagIds.forEach { tagId ->
                         recipeTagRepository.addTagToRecipe(createdRecipe.recipeId, tagId)
+                    }
+
+                    recipeCreationRequest.ingredients.forEach { ingredient ->
+                        recipeIngredientRepository.addIngredientToRecipe(createdRecipe.recipeId, ingredient)
                     }
                 } catch (e: Exception) {
                     call.respond(HttpStatusCode.InternalServerError, "Failed to add categories or tags.")

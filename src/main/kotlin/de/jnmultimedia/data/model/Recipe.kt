@@ -7,6 +7,6 @@ data class Recipe(
     val recipeId: Int? = null,
     val name: String,
     val description: String,
-    val authorId: Int,
-    val creationDate: String
+    val authorId: Int? = null,
+    val creationDate: String? = null
 )

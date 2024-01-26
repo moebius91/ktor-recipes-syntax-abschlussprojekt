@@ -1,5 +1,7 @@
 package de.jnmultimedia.data.repositories
 
+import de.jnmultimedia.data.model.Ingredient
+import de.jnmultimedia.data.model.IngredientUnit
 import de.jnmultimedia.data.tables.RecipeIngredientsTable
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
@@ -10,11 +12,17 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 class RecipeIngredientRepository {
 
-    fun addIngredientToRecipe(recipeId: Int, ingredientId: Int) {
+    fun addIngredientToRecipe(recipeId: Int, ingredient: Ingredient) {
+        val ingredientId = ingredient.ingredientId ?: 0
+        val count = ingredient.count ?: 0
+        val ingredientUnit = ingredient.unit
+
         transaction {
             RecipeIngredientsTable.insert {
                 it[RecipeIngredientsTable.recipeId] = recipeId
                 it[RecipeIngredientsTable.ingredientId] = ingredientId
+                it[RecipeIngredientsTable.count] = count
+                it[RecipeIngredientsTable.unit] = ingredientUnit ?: IngredientUnit.PIECE
             }
         }
     }

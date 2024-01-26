@@ -1,7 +1,9 @@
 package de.jnmultimedia.data.repositories
 
 import de.jnmultimedia.data.extensions.toRecipe
+import de.jnmultimedia.data.extensions.toRecipeOutput
 import de.jnmultimedia.data.model.Recipe
+import de.jnmultimedia.data.model.RecipeOutput
 import de.jnmultimedia.data.tables.RecipesTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -14,19 +16,18 @@ class RecipeRepository {
     // CREATE
     fun createRecipe(recipe: Recipe): Recipe? {
         val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-        val parsedDate = LocalDate.parse(recipe.creationDate, formatter)
 
         val name = recipe.name
         val description = recipe.description
         val authorId = recipe.authorId
-        val creationDate = parsedDate
+        val creationDate = recipe.creationDate?.let { LocalDate.parse(it, formatter) }
 
         return transaction {
             val recipeId = RecipesTable.insert {
                 it[RecipesTable.name] = name
                 it[RecipesTable.description] = description
-                it[RecipesTable.authorId] = authorId
-                it[RecipesTable.creationDate] = creationDate
+                it[RecipesTable.authorId] = authorId!!
+                it[RecipesTable.creationDate] = creationDate ?: LocalDate.now()
             }.resultedValues
                 ?.firstOrNull()
                 ?.get(RecipesTable.recipeId)
@@ -44,9 +45,9 @@ class RecipeRepository {
     }
 
     // READ
-    fun getAllRecipes(): List<Recipe> {
+    fun getAllRecipes(): List<RecipeOutput> {
         return transaction {
-            RecipesTable.selectAll().map { it.toRecipe() }
+            RecipesTable.selectAll().map { it.toRecipeOutput() }
         }
     }
 
@@ -64,7 +65,7 @@ class RecipeRepository {
             val updatedRowCount = RecipesTable.update({ RecipesTable.recipeId eq recipeId }) {
                 it[name] = updatedRecipe.name
                 it[description] = updatedRecipe.description
-                it[authorId] = updatedRecipe.authorId
+                it[authorId] = updatedRecipe.authorId!!
                 it[creationDate] = parsedDate
             }
             updatedRowCount > 0

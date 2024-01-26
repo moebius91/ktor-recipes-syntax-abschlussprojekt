@@ -3,6 +3,7 @@ package de.jnmultimedia.data.repositories
 import de.jnmultimedia.data.extensions.toIngredient
 import de.jnmultimedia.data.model.Ingredient
 import de.jnmultimedia.data.tables.IngredientsTable
+import de.jnmultimedia.data.tables.RecipeIngredientsTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction

@@ -6,5 +6,6 @@ import kotlinx.serialization.Serializable
 data class RecipeCreationRequest(
     val recipe: Recipe,
     val categoryIds: List<Int>,
-    val tagIds: List<Int>
+    val tagIds: List<Int>,
+    val ingredients: List<Ingredient>
 )

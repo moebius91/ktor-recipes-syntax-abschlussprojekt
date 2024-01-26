@@ -6,6 +6,4 @@ object IngredientsTable : Table("ingredients") {
     val ingredientId = integer("ingredient_id").autoIncrement()
     override val primaryKey = PrimaryKey(ingredientId)
     val name = varchar("name", 255)
-    val count = integer("count")
-    val unit = varchar("unit", 255)
 }
