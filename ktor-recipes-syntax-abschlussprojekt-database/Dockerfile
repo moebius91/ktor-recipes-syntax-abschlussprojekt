@@ -22,3 +22,5 @@ CMD ["java", "-jar", "/app/de.jnmultimedia.ktor-recipes-syntax-abschlussprojekt-
 # Shadowjar erstellt?
 # ./gradlew shadowJar
 # Im Hauptordner
+# Nicht ausführbar?
+# chmod +x gradlew

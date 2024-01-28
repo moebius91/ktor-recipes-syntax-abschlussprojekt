@@ -10,8 +10,8 @@ var APP_DATA_SOURCE: HikariDataSource? = null
 
 fun Application.configureDatabases() {
     val hikariConfig = HikariConfig(). apply {
-        //jdbcUrl = "jdbc:mysql://ktor-sample-admin-panel-login-db:3306/eb_tageschroniken"
-        jdbcUrl = "jdbc:mysql://localhost:3310/jno_testapi"
+        jdbcUrl = "jdbc:mysql://ktor-recipes-syntax-abschlussprojekt-database:3306/jno_testapi"
+        //jdbcUrl = "jdbc:mysql://localhost:3310/jno_testapi"
         driverClassName = "org.mariadb.jdbc.Driver"
         username = "jno_api"
         password = "jno_api"
