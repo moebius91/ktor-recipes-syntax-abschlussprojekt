@@ -5,6 +5,7 @@ USE jno_testapi;
 GRANT ALL PRIVILEGES ON jno_testapi.* TO 'jno_api'@'%';
 FLUSH PRIVILEGES;
 
+
 -- User table creation
 CREATE TABLE users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -15,7 +16,7 @@ CREATE TABLE users (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
--- Insert admin user - Remember to change password hash
+-- Insert admin user - Remember to change password hash //passwort1
 INSERT INTO users (username, password, role) VALUES ('admin', '$2a$10$xhZJLU6iGbVv/8AjLP.AoecuhUCE6UQu/nZxgIOexMo645KLsM3hq', 'Admin');
 
 -- Recipes table creation with a reference to user_id
@@ -43,9 +44,7 @@ CREATE TABLE categories (
 -- Ingredients table creation
 CREATE TABLE ingredients (
     ingredient_id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    count INT NOT NULL,
-    unit ENUM('GRAM', 'KILOGRAM', 'MILLILITER', 'LITER', 'PIECE') NOT NULL
+    name VARCHAR(255) NOT NULL
 ) ENGINE=InnoDB;
 
 -- Recipe-Tag relation table
@@ -70,6 +69,8 @@ CREATE TABLE recipe_categories (
 CREATE TABLE recipe_ingredients (
     recipe_id INT,
     ingredient_id INT,
+    count INT,
+    unit ENUM('GRAM', 'KILOGRAM', 'MILLILITER', 'LITER', 'PIECE'),
     PRIMARY KEY (recipe_id, ingredient_id),
     FOREIGN KEY (recipe_id) REFERENCES recipes(recipe_id),
     FOREIGN KEY (ingredient_id) REFERENCES ingredients(ingredient_id)
