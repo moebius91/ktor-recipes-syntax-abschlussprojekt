@@ -2,6 +2,9 @@
 CREATE DATABASE IF NOT EXISTS jno_testapi;
 USE jno_testapi;
 
+GRANT ALL PRIVILEGES ON jno_testapi.* TO 'jno_api'@'%';
+FLUSH PRIVILEGES;
+
 -- User table creation
 CREATE TABLE users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
