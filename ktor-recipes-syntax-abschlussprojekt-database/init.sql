@@ -13,7 +13,7 @@ CREATE TABLE users (
 ) ENGINE=InnoDB;
 
 -- Insert admin user - Remember to change password hash
-INSERT INTO users (username, password, role) VALUES ('admin', 'your_password_hash_here', 'Admin');
+INSERT INTO users (username, password, role) VALUES ('admin', '$2a$10$xhZJLU6iGbVv/8AjLP.AoecuhUCE6UQu/nZxgIOexMo645KLsM3hq', 'Admin');
 
 -- Recipes table creation with a reference to user_id
 CREATE TABLE recipes (
